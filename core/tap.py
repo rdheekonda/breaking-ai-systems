@@ -507,25 +507,25 @@ def print_search_path(
     console = Console()
 
     if not result.history:
-        console.print("[bold bright_red]No search history available.[/bold bright_red]")
+        console.print("[bold red]No search history available.[/bold red]")
         return
 
     table = Table(
         title="TAP Search Path (all nodes explored)",
-        border_style="bright_cyan",
-        header_style="bold bright_white on dark_blue",
+        border_style="dark_blue",
+        header_style="bold white on dark_blue",
         show_lines=True,
         width=120,
     )
-    table.add_column("#", style="bold bright_white", justify="center", width=4)
-    table.add_column("Depth", style="bright_white", justify="center", width=6)
+    table.add_column("#", style="bold", justify="center", width=4)
+    table.add_column("Depth", justify="center", width=6)
     table.add_column("Score", style="bold", justify="center", width=6)
-    table.add_column("Attacker Prompt", style="bright_white", width=50)
-    table.add_column("Target Response", style="white", width=50)
+    table.add_column("Attacker Prompt", width=50)
+    table.add_column("Target Response", style="italic", width=50)
 
     for i, entry in enumerate(result.history, 1):
         score = entry["score"]
-        color = "bright_green" if score >= 8 else "gold1" if score >= 5 else "bright_red"
+        color = "green" if score >= 8 else "dark_orange" if score >= 5 else "red"
 
         # Truncate for readability
         prompt = entry["prompt"]
@@ -546,8 +546,8 @@ def print_search_path(
 
     console.print(table)
     console.print(
-        f"\n  [bold bright_white]Total nodes explored:[/bold bright_white] "
+        f"\n  [bold]Total nodes explored:[/bold] "
         f"{len(result.history)}  |  "
-        f"[bold bright_white]Best score:[/bold bright_white] "
-        f"[bold bright_green]{result.best_score}/10[/bold bright_green]"
+        f"[bold]Best score:[/bold] "
+        f"[bold green]{result.best_score}/10[/bold green]"
     )
