@@ -512,9 +512,9 @@ def print_search_path(
 
     table = Table(
         title="TAP Search Path (all nodes explored)",
-        border_style="bright_blue",
-        header_style="bold white on blue",
-        title_style="bold bright_blue",
+        border_style="white",
+        header_style="bold reverse",
+        title_style="bold",
         show_lines=True,
         width=100,
     )
@@ -552,3 +552,189 @@ def print_search_path(
         f"[bold]Best score:[/bold] "
         f"[bold green]{result.best_score}/10[/bold green]"
     )
+
+
+# ── Direct request helper ─────────────────────────────────────────────────
+
+
+def send_direct_request(
+    model: str,
+    goal: str,
+    system_prompt: str = "You are a helpful assistant.",
+) -> str:
+    """Send a goal directly to a model (no attack). Returns the response text."""
+    return _llm(
+        model,
+        [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": goal},
+        ],
+        temperature=0.0,
+        max_tokens=512,
+    )
+
+
+# ── Result display ────────────────────────────────────────────────────────
+
+
+def print_tap_result(result: TAPResult, success_score: int = 10) -> None:
+    """
+    Print TAP attack results: summary metrics, best prompt, target response,
+    and score progression by depth.
+
+    Args:
+        result:        A TAPResult from run_tap().
+        success_score: The threshold used to declare success (for display only).
+    """
+    from rich.console import Console
+    from rich.panel import Panel
+    from rich.table import Table
+
+    console = Console()
+
+    # ── Summary metrics ──────────────────────────────────────────────────
+    table = Table(
+        title="TAP Attack Results",
+        border_style="white",
+        header_style="bold reverse",
+        title_style="bold",
+        show_lines=True,
+        width=100,
+    )
+    table.add_column("Metric", style="bold", width=22)
+    table.add_column("Value", style="bold", width=24)
+    table.add_column("Description", width=40)
+
+    table.add_row("Goal", result.goal, "Adversarial objective")
+    table.add_row(
+        "Jailbreak Found",
+        "[bold green]Yes[/bold green]" if result.success
+        else "[bold red]No[/bold red]",
+        f"Judge scored >= {success_score}/10",
+    )
+    table.add_row(
+        "Best Score",
+        f"[bold green]{result.best_score}/10[/bold green]"
+        if result.success
+        else f"[bold red]{result.best_score}/10[/bold red]",
+        "Highest judge rating achieved",
+    )
+    table.add_row(
+        "Depth Reached",
+        str(result.depth_reached),
+        f"Tree depth at termination (max {result.depth_reached})",
+    )
+    table.add_row(
+        "Target Queries",
+        f"[bold]{result.target_queries}[/bold]",
+        "Queries sent to the target model",
+    )
+    table.add_row(
+        "Total LLM Queries",
+        str(result.total_queries),
+        "All calls (attacker + judge + on-topic + target)",
+    )
+    table.add_row(
+        "Execution Time",
+        f"{result.execution_time:.1f}s",
+        "Wall-clock duration",
+    )
+
+    console.print(table)
+
+    # ── Best attacker prompt ─────────────────────────────────────────────
+    if result.best_prompt:
+        console.print()
+        console.print(Panel(
+            result.best_prompt,
+            title="Best Attacker Prompt",
+            title_align="left",
+            border_style="green",
+            style="bold",
+            width=100,
+        ))
+
+    # ── Target response ──────────────────────────────────────────────────
+    if result.best_response:
+        console.print()
+        console.print(Panel(
+            result.best_response,
+            title="Target Response (to best prompt)",
+            title_align="left",
+            border_style="yellow",
+            style="bold",
+            width=100,
+        ))
+
+    # ── Score progression by depth ───────────────────────────────────────
+    if result.history:
+        depth_scores: dict[int, list[int]] = {}
+        for entry in result.history:
+            d = entry["depth"]
+            depth_scores.setdefault(d, []).append(entry["score"])
+
+        console.print()
+        st = Table(
+            title="Score Progression by Depth",
+            border_style="white",
+            header_style="bold reverse",
+            title_style="bold",
+            show_lines=True,
+        )
+        st.add_column("Depth", style="bold", justify="center", width=8)
+        st.add_column("Candidates", justify="center", width=12)
+        st.add_column("Scores", style="bold")
+        st.add_column("Best", style="bold", justify="center", width=8)
+
+        for d in sorted(depth_scores.keys()):
+            scores = depth_scores[d]
+            best = max(scores)
+            color = (
+                "green" if best >= success_score
+                else "magenta" if best >= 5
+                else "red"
+            )
+            st.add_row(
+                str(d),
+                str(len(scores)),
+                ", ".join(str(s) for s in scores),
+                f"[{color}]{best}[/{color}]",
+            )
+
+        console.print(st)
+
+
+# ── Progress callback factory ─────────────────────────────────────────────
+
+
+def make_tap_progress_callback(
+    max_depth: int, success_score: int
+) -> Callable[[int, int, int, str], None]:
+    """
+    Return a progress callback for run_tap() that prints a Rich-formatted
+    status line per depth.
+
+    Args:
+        max_depth:     Maximum tree depth (for display).
+        success_score: Score threshold (for colour coding).
+    """
+    from rich.console import Console
+
+    console = Console()
+
+    def _on_progress(
+        depth: int, n_candidates: int, best_score: int, status: str
+    ) -> None:
+        color = (
+            "green" if best_score >= success_score
+            else "magenta" if best_score >= 5
+            else "red"
+        )
+        console.print(
+            f"  Depth [bold]{depth:>2}[/bold]/{max_depth} "
+            f"| candidates: {n_candidates} "
+            f"| best: [{color}]{best_score}/10[/{color}] "
+            f"| {status}"
+        )
+
+    return _on_progress

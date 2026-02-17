@@ -1,6 +1,6 @@
 # Breaking AI Systems: From Image Classifiers to LLM Agents
 
-**Guest Lecture — [CS 6501: Security of AI Systems](https://dartlab.org/cs6501-sp26/schedule/) | University of Virginia, February 2026**
+**Guest Lecture — [CS 6501: Security of AI Systems](https://dartlab.org/cs6501-sp26/schedule/#:~:text=Breaking%20AI%20Systems%3A%20From%20Image%20Classifiers%20to%20LLM%20Agents) | University of Virginia, February 2026**
 
 **Raja Sekhar Rao Dheekonda** | Distinguished Engineer @ [Dreadnode](https://dreadnode.io)
 
