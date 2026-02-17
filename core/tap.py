@@ -512,8 +512,9 @@ def print_search_path(
 
     table = Table(
         title="TAP Search Path (all nodes explored)",
-        border_style="dark_blue",
-        header_style="bold white on dark_blue",
+        border_style="blue",
+        header_style="bold white on blue",
+        title_style="bold blue",
         show_lines=True,
         width=120,
     )
@@ -521,11 +522,11 @@ def print_search_path(
     table.add_column("Depth", justify="center", width=6)
     table.add_column("Score", style="bold", justify="center", width=6)
     table.add_column("Attacker Prompt", width=50)
-    table.add_column("Target Response", style="italic", width=50)
+    table.add_column("Target Response", width=50)
 
     for i, entry in enumerate(result.history, 1):
         score = entry["score"]
-        color = "green" if score >= 8 else "dark_orange" if score >= 5 else "red"
+        color = "green" if score >= 8 else "magenta" if score >= 5 else "red"
 
         # Truncate for readability
         prompt = entry["prompt"]
