@@ -51,7 +51,7 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 ### 2. Clone the repository
 
 ```bash
-git clone https://github.com/dreadnode/breaking-ai-systems.git
+git clone https://github.com/rdheekonda/breaking-ai-systems.git
 cd breaking-ai-systems
 ```
 
