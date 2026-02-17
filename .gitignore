@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_metadata/
+
+# Environment
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated artifacts
+notebooks/reference.png
+notebooks/test_image.png
+data/adversarial_*.png
+data/perturbation_*.png
+data/meth_injected.png
+data/flag.txt
+**/flag.txt
+
+# uv
+uv.lock
