@@ -13,9 +13,9 @@ Hands-on demos and a case study covering adversarial attacks across the full AI 
 | # | Notebook | Description |
 |---|----------|-------------|
 | Setup | [00_setup_verification.ipynb](demos/00_setup_verification.ipynb) | Verify your environment, dependencies, and API keys are configured correctly before running demos |
-| Demo 1 | [demo1_adversarial_evasion.ipynb](demos/demo1_adversarial_evasion.ipynb) | Force a MobileNetV2 classifier to misclassify a wolf as a "Granny Smith apple" using white-box PGD and black-box HopSkipJump attacks |
-| Demo 2 | [demo2_text_model_probing.ipynb](demos/demo2_text_model_probing.ipynb) | Use Tree of Attacks with Pruning (TAP) to automatically discover jailbreak prompts that bypass an LLM's safety guardrails |
-| Demo 3 | [demo3_multimodal_probing.ipynb](demos/demo3_multimodal_probing.ipynb) | Exploit cross-modal attack surfaces by splitting harmful intent across text and image inputs to bypass multimodal safety filters |
+| 1 | [adversarial_model_evasion.ipynb](demos/adversarial_model_evasion.ipynb) | Force a MobileNetV2 classifier to misclassify a wolf as a "Granny Smith apple" using white-box PGD and black-box HopSkipJump attacks |
+| 2 | [llm_text_model_probing.ipynb](demos/llm_text_model_probing.ipynb) | Use Tree of Attacks with Pruning (TAP) to automatically discover jailbreak prompts that bypass an LLM's safety guardrails |
+| 3 | [multimodal_probing.ipynb](demos/multimodal_probing.ipynb) | Exploit cross-modal attack surfaces by splitting harmful intent across text and image inputs to bypass multimodal safety filters |
 | Case Study | [case_study_186_jailbreaks.ipynb](demos/case_study_186_jailbreaks.ipynb) | Analyze results from running TAP, GOAT, and Crescendo at scale — 186 jailbreaks discovered in 137 minutes of automated red teaming |
 
 ## Prerequisites
@@ -85,6 +85,13 @@ Open and run `demos/00_setup_verification.ipynb` to confirm everything is workin
 ```
 breaking-ai-systems/
 ├── core/
+│   ├── __init__.py         # Public API — all exports
+│   ├── models.py           # Shared model loading + preprocessing (MobileNetV2)
+│   ├── pgd.py              # White-box PGD attack (PGDResult + run_pgd)
+│   ├── hop_skip_jump.py    # Black-box HopSkipJump attack (HSJResult + run_hsj)
+│   ├── display.py          # Shared Rich comparison tables
+│   ├── visual.py           # Matplotlib visualization helpers
+│   ├── utils.py            # Crucible flag submission helpers
 │   ├── tap.py              # Tree of Attacks with Pruning (TAP) implementation
 │   └── transforms.py       # Image transforms for multimodal attacks
 ├── data/
@@ -92,9 +99,9 @@ breaking-ai-systems/
 │   └── meth.png            # Reference image for Demo 3 (multimodal probing)
 ├── demos/
 │   ├── 00_setup_verification.ipynb
-│   ├── demo1_adversarial_evasion.ipynb
-│   ├── demo2_text_model_probing.ipynb
-│   ├── demo3_multimodal_probing.ipynb
+│   ├── adversarial_model_evasion.ipynb
+│   ├── llm_text_model_probing.ipynb
+│   ├── multimodal_probing.ipynb
 │   └── case_study_186_jailbreaks.ipynb
 ├── .env-example            # Template for API keys
 └── pyproject.toml

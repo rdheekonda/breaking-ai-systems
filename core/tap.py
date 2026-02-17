@@ -512,17 +512,17 @@ def print_search_path(
 
     table = Table(
         title="TAP Search Path (all nodes explored)",
-        border_style="blue",
+        border_style="bright_blue",
         header_style="bold white on blue",
-        title_style="bold blue",
+        title_style="bold bright_blue",
         show_lines=True,
-        width=120,
+        width=100,
     )
     table.add_column("#", style="bold", justify="center", width=4)
     table.add_column("Depth", justify="center", width=6)
     table.add_column("Score", style="bold", justify="center", width=6)
-    table.add_column("Attacker Prompt", width=50)
-    table.add_column("Target Response", width=50)
+    table.add_column("Attacker Prompt", ratio=1)
+    table.add_column("Target Response", ratio=1)
 
     for i, entry in enumerate(result.history, 1):
         score = entry["score"]
