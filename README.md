@@ -9,6 +9,8 @@ Hands-on adversarial attacks across the full AI stack -- from white-box image pe
 > **Guest Lecture** -- [CS 6501: Security of AI Systems](https://dartlab.org/cs6501-sp26/schedule/#:~:text=Breaking%20AI%20Systems%3A%20From%20Image%20Classifiers%20to%20LLM%20Agents) | University of Virginia, February 2026
 >
 > **Raja Sekhar Rao Dheekonda** | Distinguished Engineer @ [Dreadnode](https://dreadnode.io)
+>
+> [**Slides (PDF)**](Breaking%20AI%20Systems%20-%20UVA%20Guest%20Lecture%202026%20.pdf)
 
 ---
 
@@ -151,6 +153,7 @@ breaking-ai-systems/
 │   ├── llm_text_model_probing.ipynb
 │   ├── multimodal_probing.ipynb
 │   └── case_study_186_jailbreaks.ipynb
+├── Breaking AI Systems - UVA Guest Lecture 2026 .pdf
 ├── .env-example            # Template for API keys
 └── pyproject.toml
 ```
@@ -159,6 +162,7 @@ breaking-ai-systems/
 
 ## Resources
 
+- **Slides**: [Breaking AI Systems -- UVA Guest Lecture 2026 (PDF)](Breaking%20AI%20Systems%20-%20UVA%20Guest%20Lecture%202026%20.pdf)
 - **Blog**: [186 Jailbreaks: Applying MLOps to AI Red Teaming](https://dreadnode.io/blog/186-jailbreaks-applying-mlops-to-ai-red-teaming)
 - **Full eval notebook**: [AI Red Teaming Eval](https://github.com/dreadnode/sdk/blob/main/examples/airt/ai_red_teaming_eval.ipynb) -- complete implementation orchestrating TAP, GOAT, and Crescendo at scale
 - **Crucible CTF**: [platform.dreadnode.io/crucible](https://platform.dreadnode.io/crucible)
